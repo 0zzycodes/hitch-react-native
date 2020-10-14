@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "my-tour",
-    "slug": "my-tour",
+    "name": "Hitch",
+    "slug": "Hitch",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,6 +21,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "host.exp.exponent"
     }
   }
 }
