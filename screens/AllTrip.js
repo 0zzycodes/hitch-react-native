@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { StyleSheet, ScrollView } from "react-native";
 import TripPreview from "../components/TripPreview";
 
-const AllTrip = ({ trips }) => {
+const AllTrip = (props) => {
+  const { trips } = props;
   const [state, setState] = useState({ treeps: [] });
   useEffect(() => {
     const treeps = [];
@@ -29,9 +30,9 @@ const AllTrip = ({ trips }) => {
         .filter((item, index) => index < 10)
         .map((trip, index) =>
           trip.isExpired ? (
-            <TripPreview key={index} trip={trip} expired />
+            <TripPreview key={index} trip={trip} expired props={props} />
           ) : (
-            <TripPreview key={index} trip={trip} />
+            <TripPreview key={index} trip={trip} props={props} />
           )
         )}
     </ScrollView>

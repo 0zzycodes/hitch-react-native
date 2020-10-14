@@ -103,6 +103,7 @@ function ProfileNavigator() {
       <Stack.Screen options={{}} name="Create Trip" component={CreateScreen} />
       <Stack.Screen options={{}} name="Edit Trip" component={EditTrip} />
       <Stack.Screen options={{}} name="Edit Profile" component={EditProfile} />
+      <Stack.Screen name="Trip" component={Trip} />
     </Stack.Navigator>
   );
 }

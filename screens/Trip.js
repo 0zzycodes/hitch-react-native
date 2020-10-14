@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
+import { editTrip } from "../redux/trip/actions";
 import { StyleSheet, ScrollView, Text, Image, View } from "react-native";
 import AppButton from "../components/AppButton";
 
-const Trip = ({ trip, currentUser, expired }) => {
+const Trip = (props) => {
+  const { trip, currentUser, expired, editTrip } = props;
   const {
     driver,
     pickUpPoint,
@@ -146,7 +148,13 @@ const Trip = ({ trip, currentUser, expired }) => {
             marginTop: "auto",
           }}
         >
-          <AppButton onPress={() => {}} title="Expired" />
+          <AppButton
+            onPress={() => {
+              editTrip(trip);
+              props.navigation.navigate("Edit Trip");
+            }}
+            title="Expired"
+          />
         </View>
       ) : driver && driver.id === currentUser.id ? (
         <View
@@ -156,7 +164,13 @@ const Trip = ({ trip, currentUser, expired }) => {
             marginTop: "auto",
           }}
         >
-          <AppButton onPress={() => {}} title="Edit" />
+          <AppButton
+            onPress={() => {
+              editTrip(trip);
+              props.navigation.navigate("Edit Trip");
+            }}
+            title="Edit"
+          />
         </View>
       ) : state.isPassanger ? (
         <View
@@ -273,6 +287,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   setTrips: (trip) => dispatch(setTrips(trip)),
+  editTrip: (trip) => dispatch(editTrip(trip)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trip);

@@ -28,8 +28,8 @@ const EditTrip = (props) => {
   );
   const [numberPlate, setNumberPlate] = useState(trip.numberPlate);
   const [carType, setCarType] = useState(trip.carType);
-  const [vacantSeats, setVacantSeats] = useState(trip.vacantSeats);
-  const [seatCost, setSeatCost] = useState(trip.seatCost);
+  const [vacantSeats, setVacantSeats] = useState(`${trip.vacantSeats}`);
+  const [seatCost, setSeatCost] = useState(`${trip.seatCost}`);
   const [description, setDescription] = useState(trip.description);
   const [loading, setLoading] = useState(false);
 
