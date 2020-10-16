@@ -6,12 +6,15 @@ import AppButton from "../components/AppButton";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = async (event) => {
+    setLoading(true);
     try {
       await auth.signInWithEmailAndPassword(email, password);
       setEmail("");
       setPassword("");
+      setLoading(false);
     } catch (error) {
       error.code === "auth/wrong-password"
         ? setErrorMessage(
@@ -22,6 +25,7 @@ const Login = () => {
             "There is no user record corresponding to this identifier."
           )
         : setErrorMessage("Shit just got real");
+      setLoading(false);
     }
     // this.setState({ email: '', password: '' });
   };
@@ -60,6 +64,7 @@ const Login = () => {
           onPress={handleSubmit}
           title="LOGIN"
           customStyle={styles.btn}
+          loading={loading}
         />
       </View>
     </View>

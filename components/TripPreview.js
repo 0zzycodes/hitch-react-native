@@ -30,6 +30,7 @@ const TripPreview = ({
     numberOfPassanger: "",
     isPassanger: false,
     isSuccess: false,
+    loading: false,
   });
   useEffect(() => {
     passangers &&
@@ -41,11 +42,14 @@ const TripPreview = ({
   }, [currentUser.id, passangers]);
 
   const handleJoinTrip = async (e) => {
+    setState({ loading: true });
     await updateTrip(id, 1, currentUser);
-    setState({ isSuccess: true });
+    setState({ isSuccess: true, loading: false });
   };
   const handleUnjoinTrip = async (e) => {
+    setState({ loading: true });
     await unJoinTrip(id, currentUser.id);
+    setState({ loading: false });
   };
   return (
     <View style={styles.carouselItemWrapper}>
@@ -152,6 +156,7 @@ const TripPreview = ({
               onPress={handleUnjoinTrip}
               title="Cancel"
               customStyle={{ backgroundColor: "red" }}
+              loading={state.loading}
             />
           </View>
         ) : state.isSuccess ? (
@@ -160,6 +165,7 @@ const TripPreview = ({
               onPress={handleUnjoinTrip}
               title="Cancel"
               customStyle={{ backgroundColor: "red" }}
+              loading={state.loading}
             />
           </View>
         ) : vacantSeats === 0 ? (
@@ -168,7 +174,11 @@ const TripPreview = ({
           </View>
         ) : (
           <View style={{ paddingHorizontal: 20 }}>
-            <AppButton onPress={handleJoinTrip} title="Join Trip" />
+            <AppButton
+              onPress={handleJoinTrip}
+              title="Join Trip"
+              loading={state.loading}
+            />
           </View>
         )}
       </View>
@@ -179,7 +189,7 @@ const TripPreview = ({
 const styles = StyleSheet.create({
   carouselItemWrapper: {
     height: 340,
-    width: 300,
+    width: "90%",
     // padding: 20,
     margin: 10,
     marginLeft: 10,

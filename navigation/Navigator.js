@@ -16,6 +16,7 @@ import Register from "../screens/Register";
 import Trip from "../screens/Trip";
 import FoundTrip from "../screens/FoundTrip";
 import EditTrip from "../screens/EditTrip";
+import ChatScreen from "../screens/ChatScreen";
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -61,8 +62,9 @@ function HomeNavigator() {
         component={HomeScreen}
       />
       <Stack.Screen options={{}} name="All Trips" component={AllTrip} />
-      <Stack.Screen name="Trip" component={Trip} />
       <Stack.Screen options={{}} name="Edit Trip" component={EditTrip} />
+      <Stack.Screen name="Trip" component={Trip} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 }
@@ -104,6 +106,7 @@ function ProfileNavigator() {
       <Stack.Screen options={{}} name="Edit Trip" component={EditTrip} />
       <Stack.Screen options={{}} name="Edit Profile" component={EditProfile} />
       <Stack.Screen name="Trip" component={Trip} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 }
@@ -124,6 +127,7 @@ function SearchNavigator() {
       <Stack.Screen options={{}} name="Found Trip" component={FoundTrip} />
       <Stack.Screen options={{}} name="Edit Trip" component={EditTrip} />
       <Stack.Screen name="Trip" component={Trip} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 }

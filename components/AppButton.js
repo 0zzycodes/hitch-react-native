@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+// import loader from "";
 import { MaterialIcons } from "@expo/vector-icons";
 const AppButton = ({
   onPress,
@@ -9,6 +10,7 @@ const AppButton = ({
   iconColor,
   textStyle,
   disabled,
+  loading,
 }) => {
   return (
     <TouchableOpacity
@@ -24,6 +26,12 @@ const AppButton = ({
         />
       )}
       <Text style={{ ...styles.appButtonText, ...textStyle }}>{title}</Text>
+      {loading && (
+        <Image
+          style={{ marginLeft: 5, width: 20, height: 20 }}
+          source={require("../assets/loader.gif")}
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -31,7 +39,6 @@ const AppButton = ({
 export default AppButton;
 
 const styles = StyleSheet.create({
-  // ...
   appButtonContainer: {
     flexDirection: "row",
     justifyContent: "center",

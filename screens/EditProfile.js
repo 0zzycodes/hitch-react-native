@@ -30,6 +30,7 @@ const EditProfile = (props) => {
   const [phone, setPhone] = useState(currentUser.phone);
   const [age, setAge] = useState(currentUser.age);
   const [selectedGender, setSelectedGender] = useState("");
+  const [loading, setLoading] = useState(false);
 
   //   useEffect(() => {
   //     (async () => {
@@ -82,6 +83,7 @@ const EditProfile = (props) => {
   //     }
   //   };
   const handleSave = async () => {
+    setLoading(true);
     const incomingData = {
       name,
       //   profile_pic: profilePic,
@@ -92,6 +94,7 @@ const EditProfile = (props) => {
       gender: selectedGender,
     };
     const success = await updateProfileData(currentUser.id, incomingData);
+    setLoading(false);
     success && props.navigation.navigate("Profile");
   };
   return (
@@ -111,6 +114,7 @@ const EditProfile = (props) => {
             onPress={handleSave}
             title="Save"
             customStyle={styles.btn}
+            loading={loading}
           />
         </View>
       </View>

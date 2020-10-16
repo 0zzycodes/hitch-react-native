@@ -133,6 +133,7 @@ const EditTrip = (props) => {
             }}
             title="Cancel Trip"
             customStyle={styles.btn}
+            loading={loading}
           />
         </View>
       </View>
@@ -326,7 +327,7 @@ const EditTrip = (props) => {
           onPress={handleCreateTrip}
           title="Save"
           customStyle={styles.saveBtn}
-          disabled={loading ? true : false}
+          loading={loading}
         />
       </View>
     </ScrollView>

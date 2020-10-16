@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from "react-native";
-import { createTrip, updateProfile } from "../firebase/firebase.utils";
+import { createTrip } from "../firebase/firebase.utils";
+import firebase from "../firebase/firebase.utils";
 import AppButton from "../components/AppButton";
 import CustomPicker from "../components/CustomPicker";
 import { GenerateId } from "../utils/id-generator";
@@ -41,8 +42,31 @@ const CreateScreen = (props) => {
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
+  const addChannel = async (channelId, channelName, channelDetails) => {
+    const { id, name } = currentUser;
+    const newChannel = {
+      id: channelId,
+      name: channelName,
+      details: channelDetails,
+      createdBy: {
+        id,
+        name: name,
+      },
+    };
+    await firebase
+      .database()
+      .ref("channels")
+      .child(channelId)
+      .update(newChannel)
+      .then(() => {
+        console.log("channel added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleCreateTrip = async () => {
-    // setLoading(true);
+    setLoading(true);
     const pushId = GenerateId();
     try {
       const tripData = {
@@ -83,6 +107,9 @@ const CreateScreen = (props) => {
         return;
       }
       await createTrip(tripData, pushId);
+      const channelName = `${selectedPickUpPoint} to ${selectedDestination}`;
+      const channelDetails = `Trip from ${selectedPickUpPoint} to ${selectedDestination}`;
+      await addChannel(pushId, channelName, channelDetails);
       setTime("");
       setSelectedPickUpPoint("");
       setSelectedDestination("");
@@ -324,6 +351,7 @@ const CreateScreen = (props) => {
           onPress={handleCreateTrip}
           title="Create"
           customStyle={styles.btn}
+          loading={loading}
         />
       </View>
     </ScrollView>

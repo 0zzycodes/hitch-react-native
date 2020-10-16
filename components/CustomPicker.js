@@ -22,9 +22,6 @@ const CustomPicker = ({
         ...style,
       }}
       onValueChange={(itemValue, itemIndex) => {
-        console.log("====================================");
-        console.log(itemValue);
-        console.log("====================================");
         setSelectedValue(itemValue);
       }}
     >

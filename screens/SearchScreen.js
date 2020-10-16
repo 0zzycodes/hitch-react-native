@@ -14,6 +14,7 @@ const SearchScreen = (props) => {
   const [time, setTime] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleDatePicker = () => {
     setDatePickerVisibility(!isDatePickerVisible);
@@ -42,62 +43,87 @@ const SearchScreen = (props) => {
     setTimePickerVisibility(!isTimePickerVisible);
   };
   const handleFindTrip = async () => {
-    // this.setState({ isLoading: true });
-    const tripUrl =
-      selectedPickUpPoint !== "" &&
-      selectedDestination !== "" &&
-      date !== "" &&
-      time !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("pickUpPoint", "==", `${selectedPickUpPoint.toLowerCase()}`)
-            .where("destination", "==", `${selectedDestination.toLowerCase()}`)
-            .where("date", "==", `${date}`)
-            .where("time", "==", `${time}`)
-        : selectedPickUpPoint !== "" && selectedDestination !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("pickUpPoint", "==", `${selectedPickUpPoint.toLowerCase()}`)
-            .where("destination", "==", `${selectedDestination.toLowerCase()}`)
-        : selectedDestination !== "" && date !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("destination", "==", `${selectedDestination.toLowerCase()}`)
-            .where("date", "==", `${date}`)
-        : selectedDestination !== "" && time !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("destination", "==", `${selectedDestination.toLowerCase()}`)
-            .where("time", "==", `${time}`)
-        : date !== "" && time !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("date", "==", `${date}`)
-            .where("time", "==", `${time}`)
-        : selectedDestination !== ""
-        ? firestore
-            .collection(`trips`)
-            .where("destination", "==", `${selectedDestination.toLowerCase()}`)
-        : date !== ""
-        ? firestore.collection(`trips`).where("date", "==", `${date}`)
-        : firestore.collection(`trips`).where("time", "==", `${time}`);
-    const tripRef = tripUrl;
-    tripRef.onSnapshot((snapshot) => {
-      const trips = [];
-      snapshot.docs.forEach((doc) => {
-        trips.push(doc.data());
+    setLoading(true);
+    try {
+      const tripUrl =
+        selectedPickUpPoint !== "" &&
+        selectedDestination !== "" &&
+        date !== "" &&
+        time !== ""
+          ? firestore
+              .collection(`trips`)
+              .where(
+                "pickUpPoint",
+                "==",
+                `${selectedPickUpPoint.toLowerCase()}`
+              )
+              .where(
+                "destination",
+                "==",
+                `${selectedDestination.toLowerCase()}`
+              )
+              .where("date", "==", `${date}`)
+              .where("time", "==", `${time}`)
+          : selectedPickUpPoint !== "" && selectedDestination !== ""
+          ? firestore
+              .collection(`trips`)
+              .where(
+                "pickUpPoint",
+                "==",
+                `${selectedPickUpPoint.toLowerCase()}`
+              )
+              .where(
+                "destination",
+                "==",
+                `${selectedDestination.toLowerCase()}`
+              )
+          : selectedDestination !== "" && date !== ""
+          ? firestore
+              .collection(`trips`)
+              .where(
+                "destination",
+                "==",
+                `${selectedDestination.toLowerCase()}`
+              )
+              .where("date", "==", `${date}`)
+          : selectedDestination !== "" && time !== ""
+          ? firestore
+              .collection(`trips`)
+              .where(
+                "destination",
+                "==",
+                `${selectedDestination.toLowerCase()}`
+              )
+              .where("time", "==", `${time}`)
+          : date !== "" && time !== ""
+          ? firestore
+              .collection(`trips`)
+              .where("date", "==", `${date}`)
+              .where("time", "==", `${time}`)
+          : selectedDestination !== ""
+          ? firestore
+              .collection(`trips`)
+              .where(
+                "destination",
+                "==",
+                `${selectedDestination.toLowerCase()}`
+              )
+          : date !== ""
+          ? firestore.collection(`trips`).where("date", "==", `${date}`)
+          : firestore.collection(`trips`).where("time", "==", `${time}`);
+      const tripRef = tripUrl;
+      tripRef.onSnapshot((snapshot) => {
+        const trips = [];
+        snapshot.docs.forEach((doc) => {
+          trips.push(doc.data());
+        });
+        props.setFoundTrip(trips);
       });
-      props.setFoundTrip(trips);
-    });
-    // setLoading({
-    //   isLoading: false,
-    // });
-    props.navigation.navigate("Found Trip");
-    // } catch (error) {
-    //   // setLoading({
-    //   //   isLoading: false,
-    //   // });
-    // }
+      setLoading(false);
+      props.navigation.navigate("Found Trip");
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (

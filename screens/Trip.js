@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import { editTrip } from "../redux/trip/actions";
-import { StyleSheet, ScrollView, Text, Image, View } from "react-native";
+import { StyleSheet, Text, Image, View } from "react-native";
+import { updateTrip, unJoinTrip } from "../firebase/firebase.utils";
 import AppButton from "../components/AppButton";
+import { setCurrentChannel } from "../redux/chat/actions";
 
 const Trip = (props) => {
-  const { trip, currentUser, expired, editTrip } = props;
+  const { trip, currentUser, expired, editTrip, setCurrentChannel } = props;
   const {
     driver,
     pickUpPoint,
@@ -24,6 +27,7 @@ const Trip = (props) => {
     numberOfPassanger: "",
     isPassanger: false,
     isSuccess: false,
+    loading: false,
   });
   useEffect(() => {
     passangers &&
@@ -37,11 +41,18 @@ const Trip = (props) => {
   }, [currentUser.id, passangers]);
 
   const handleJoinTrip = async (e) => {
+    setState({ loading: true });
     await updateTrip(id, 1, currentUser);
-    setState({ isSuccess: true });
+    setState({ isSuccess: true, loading: false });
   };
   const handleUnjoinTrip = async (e) => {
+    setState({ loading: true });
     await unJoinTrip(id, currentUser.id);
+    setState({ loading: false });
+  };
+  const goToMessagingPage = () => {
+    setCurrentChannel(id);
+    props.navigation.navigate(`Chat`);
   };
   return (
     <View style={styles.container}>
@@ -140,87 +151,100 @@ const Trip = (props) => {
           </Text>
         </View>
       </View>
-      {expired ? (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton
-            onPress={() => {
-              editTrip(trip);
-              props.navigation.navigate("Edit Trip");
+      <View style={{ marginTop: "auto" }}>
+        {state.isPassanger ||
+          (driver.id === currentUser.id && (
+            <View
+              style={{
+                paddingHorizontal: 20,
+              }}
+            >
+              <AppButton
+                onPress={goToMessagingPage}
+                title="Messaging"
+                customStyle={{ marginTop: "auto" }}
+                loading={state.loading}
+              />
+            </View>
+          ))}
+        {expired ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
             }}
-            title="Expired"
-          />
-        </View>
-      ) : driver && driver.id === currentUser.id ? (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton
-            onPress={() => {
-              editTrip(trip);
-              props.navigation.navigate("Edit Trip");
+          >
+            <AppButton
+              onPress={() => {
+                editTrip(trip);
+                props.navigation.navigate("Edit Trip");
+              }}
+              title="Expired"
+            />
+          </View>
+        ) : driver && driver.id === currentUser.id ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
             }}
-            title="Edit"
-          />
-        </View>
-      ) : state.isPassanger ? (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton
-            onPress={handleUnjoinTrip}
-            title="Cancel"
-            customStyle={{ backgroundColor: "red" }}
-          />
-        </View>
-      ) : state.isSuccess ? (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton
-            onPress={handleUnjoinTrip}
-            title="Cancel"
-            customStyle={{ backgroundColor: "red" }}
-          />
-        </View>
-      ) : vacantSeats === 0 ? (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton onPress={() => {}} title="No Vacant Seat" />
-        </View>
-      ) : (
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            marginTop: "auto",
-          }}
-        >
-          <AppButton onPress={handleJoinTrip} title="Join Trip" />
-        </View>
-      )}
+          >
+            <AppButton
+              onPress={() => {
+                editTrip(trip);
+                props.navigation.navigate("Edit Trip");
+              }}
+              title="Edit"
+            />
+          </View>
+        ) : state.isPassanger ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <AppButton
+              onPress={handleUnjoinTrip}
+              title="Cancel"
+              customStyle={{ backgroundColor: "red" }}
+              loading={state.loading}
+            />
+          </View>
+        ) : state.isSuccess ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <AppButton
+              onPress={handleUnjoinTrip}
+              title="Cancel"
+              customStyle={{ backgroundColor: "red" }}
+              loading={state.loading}
+            />
+          </View>
+        ) : vacantSeats === 0 ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <AppButton onPress={() => {}} title="No Vacant Seat" />
+          </View>
+        ) : (
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <AppButton onPress={handleJoinTrip} title="Join Trip" />
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -288,6 +312,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   setTrips: (trip) => dispatch(setTrips(trip)),
   editTrip: (trip) => dispatch(editTrip(trip)),
+  setCurrentChannel: (channelId) => dispatch(setCurrentChannel(channelId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trip);

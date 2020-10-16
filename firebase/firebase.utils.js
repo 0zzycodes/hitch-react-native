@@ -48,9 +48,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 export const createTrip = async (trip, id) => {
   const newTripRef = firestore.collection(`trips`).doc(`${id}`);
-  console.log("====================================");
-  console.log(newTripRef);
-  console.log("====================================");
   try {
     await newTripRef.set(trip);
     return newTripRef;

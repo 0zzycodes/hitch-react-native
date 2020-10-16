@@ -20,9 +20,11 @@ const Register = () => {
   const [selectedGender, setSelectedGender] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {}, []);
 
   const handleRegisterUser = async () => {
+    setLoading(true);
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
@@ -34,11 +36,9 @@ const Register = () => {
         age,
         gender: selectedGender,
       });
-      console.log("====================================");
-      console.log(name, phone, age, selectedGender);
-      console.log("====================================");
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
   };
   return (
@@ -128,6 +128,7 @@ const Register = () => {
           onPress={handleRegisterUser}
           title="REGISTER"
           customStyle={styles.btn}
+          loading={loading}
         />
       </View>
     </ScrollView>
