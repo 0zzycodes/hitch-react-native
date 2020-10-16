@@ -81,33 +81,33 @@ const Profile = (props) => {
             </Text>
           </View>
         )}
-        {myTrips.length === 0 && (
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <AppButton
-              onPress={() => {
-                props.navigation.navigate("All Trips");
-              }}
-              title="Create Trip"
-              customStyle={styles.btn}
-              textStyle={{ fontSize: 14 }}
-            />
-            <AppButton
-              onPress={() => {
-                props.navigation.navigate("All Trips");
-              }}
-              title="Join Trip"
-              customStyle={styles.btn}
-              textStyle={{ fontSize: 14 }}
-            />
-          </View>
-        )}
       </View>
+      {myTrips.length === 0 && (
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <AppButton
+            onPress={() => {
+              props.navigation.navigate("All Trips");
+            }}
+            title="Create Trip"
+            customStyle={styles.btn}
+            textStyle={{ fontSize: 14 }}
+          />
+          <AppButton
+            onPress={() => {
+              props.navigation.navigate("All Trips");
+            }}
+            title="Join Trip"
+            customStyle={styles.btn}
+            textStyle={{ fontSize: 14 }}
+          />
+        </View>
+      )}
       <ScrollView contentContainerStyle={{ alignItems: "center" }} style={{}}>
         {myTrips.map((item, index) => (
           <TripPreview key={index} trip={item} props={props} />

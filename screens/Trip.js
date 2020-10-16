@@ -152,21 +152,20 @@ const Trip = (props) => {
         </View>
       </View>
       <View style={{ marginTop: "auto" }}>
-        {state.isPassanger ||
-          (driver.id === currentUser.id && (
-            <View
-              style={{
-                paddingHorizontal: 20,
-              }}
-            >
-              <AppButton
-                onPress={goToMessagingPage}
-                title="Messaging"
-                customStyle={{ marginTop: "auto" }}
-                loading={state.loading}
-              />
-            </View>
-          ))}
+        {state.isPassanger || driver.id === currentUser.id ? (
+          <View
+            style={{
+              paddingHorizontal: 20,
+            }}
+          >
+            <AppButton
+              onPress={goToMessagingPage}
+              title="Messaging"
+              customStyle={{ marginTop: "auto" }}
+              loading={state.loading}
+            />
+          </View>
+        ) : null}
         {expired ? (
           <View
             style={{

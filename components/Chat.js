@@ -10,9 +10,6 @@ const isOwnMessage = (message, user) => {
 const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
 const Chat = ({ message, user }) => {
-  console.log("====================================");
-  console.log(message.user.id === user.id);
-  console.log("====================================");
   const { timestamp, content } = message;
   const { avatar, name } = message.user;
   return (

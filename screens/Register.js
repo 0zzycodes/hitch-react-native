@@ -15,7 +15,7 @@ import CustomPicker from "../components/CustomPicker";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(0);
   const [age, setAge] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [password, setPassword] = useState("");
